@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
 
 import dji.common.error.DJIError;
 import dji.common.useraccount.UserAccountState;
@@ -38,6 +39,7 @@ public class UXActivity extends AppCompatActivity {
                     , 1);
         }
 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_ux);
     }
 }

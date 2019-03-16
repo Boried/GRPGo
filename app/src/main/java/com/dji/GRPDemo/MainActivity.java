@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         new android.os.Handler().postDelayed(new Runnable() {
             public void run() {
                 Intent mainIntent = new Intent(MainActivity.this,
-                        Binding.class);
+                        transferActivity.class);
                 MainActivity.this.startActivity(mainIntent);
                 MainActivity.this.finish();
             }

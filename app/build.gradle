@@ -20,7 +20,7 @@ android {
     //Add the packagingOptions to prevent any unexpected crash of the application.
     packagingOptions { exclude 'META-INF/rxjava.properties' }
 
-    packagingOptions{
+    packagingOptions {
         doNotStrip "*/*/libdjivideo.so"
         doNotStrip "*/*/libSDKRelativeJNI.so"
         doNotStrip "*/*/libFlyForbid.so"

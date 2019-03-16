@@ -255,7 +255,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         switch (v.getId()) {
 
             case R.id.btn_open: {
-                Intent intent = new Intent(this, MainActivity.class);
+                Intent intent = new Intent(this, CameraActivity.class);
                 startActivity(intent);
                 break;
             }

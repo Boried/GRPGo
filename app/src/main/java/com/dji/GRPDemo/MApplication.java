@@ -8,6 +8,8 @@ import com.secneo.sdk.Helper;
 public class MApplication extends Application {
 
     private DemoApplication demoApplication;
+    private FPVDemoApplication fpvDemoApplication;
+
     @Override
     protected void attachBaseContext(Context paramContext) {
         super.attachBaseContext(paramContext);
@@ -17,12 +19,18 @@ public class MApplication extends Application {
             demoApplication = new DemoApplication();
             demoApplication.setContext(this);
         }
+
+        if (fpvDemoApplication == null) {
+            fpvDemoApplication = new FPVDemoApplication();
+            fpvDemoApplication.setContext(this);
+        }
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
         demoApplication.onCreate();
+        fpvDemoApplication.onCreate();
     }
 
 }
