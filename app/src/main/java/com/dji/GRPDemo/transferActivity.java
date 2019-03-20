@@ -15,6 +15,7 @@ public class transferActivity extends AppCompatActivity {
     Button login;
     Button connection;
     Button UX;
+    Button camera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +25,7 @@ public class transferActivity extends AppCompatActivity {
         login = (Button)findViewById(R.id.binding);
         connection = (Button)findViewById(R.id.connection);
         UX = (Button)findViewById(R.id.UXview);
+        camera = (Button)findViewById(R.id.camera);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,6 +54,14 @@ public class transferActivity extends AppCompatActivity {
             }
         });
 
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(transferActivity.this,CameraActivity.class);
+                startActivity(intent);
+            }
+        });
 
     }
 }

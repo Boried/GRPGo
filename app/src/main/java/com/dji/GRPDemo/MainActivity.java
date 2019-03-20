@@ -27,7 +27,6 @@ import dji.sdk.base.BaseComponent;
 import dji.sdk.base.BaseProduct;
 import dji.sdk.sdkmanager.DJISDKManager;
 
-import android.content.Intent;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,8 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private AtomicBoolean isRegistrationInProgress = new AtomicBoolean(false);
     private static final int REQUEST_PERMISSION_CODE = 12345;
 
-    private final int SPLASH_DISPLAY_LENGHT = 4000; // wait for four minutes
-
+    private final int SPLASH_DISPLAY_LENGHT = 5000; // wait for four minutes
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         }, SPLASH_DISPLAY_LENGHT);
+
 
     }
 

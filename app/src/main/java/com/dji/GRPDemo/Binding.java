@@ -161,10 +161,10 @@ public class Binding extends AppCompatActivity implements View.OnClickListener {
 
     private void initUI(){
 
-        bindingStateTV = (TextView) findViewById(R.id.tv_binding_state_info);
-        appActivationStateTV = (TextView) findViewById(R.id.tv_activation_state_info);
-        loginBtn = (Button) findViewById(R.id.btn_login);
-        logoutBtn = (Button) findViewById(R.id.btn_logout);
+        bindingStateTV =  findViewById(R.id.tv_binding_state_info);
+        appActivationStateTV =  findViewById(R.id.tv_activation_state_info);
+        loginBtn =  findViewById(R.id.btn_login);
+        logoutBtn =  findViewById(R.id.btn_logout);
         loginBtn.setOnClickListener(this);
         logoutBtn.setOnClickListener(this);
 
@@ -176,6 +176,7 @@ public class Binding extends AppCompatActivity implements View.OnClickListener {
                 new CommonCallbacks.CompletionCallbackWith<UserAccountState>() {
                     @Override
                     public void onSuccess(final UserAccountState userAccountState) {
+
                         showToast("Login Success");
                     }
                     @Override
