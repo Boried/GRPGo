@@ -81,4 +81,33 @@ android:orientation="vertical">
     android:textColor="@color/colorBlack"
     android:textSize="17sp" />
 
+
+    <TextView
+        android:id="@+id/useraccount_state_label"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@+id/tv_binding_state_info"
+        android:layout_alignStart="@+id/tv_activation_state_info"
+        android:layout_alignEnd="@+id/tv_activation_state_info"
+        android:layout_marginStart="39dp"
+        android:layout_marginTop="145dp"
+        android:layout_marginEnd="32dp"
+        android:text="User account state:"
+        android:textColor="@color/colorBlack"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_useraccount_state_info"
+        android:layout_width="220dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/activation_state_label"
+        android:layout_alignEnd="@+id/tv_binding_state_info"
+        android:layout_marginTop="137dp"
+        android:layout_marginEnd="-2dp"
+        android:text="Unknown"
+        android:textAlignment="center"
+        android:textColor="@color/colorBlack"
+        android:textSize="17sp" />
+
 </RelativeLayout>

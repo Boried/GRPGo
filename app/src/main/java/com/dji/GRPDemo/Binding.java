@@ -23,6 +23,7 @@ import dji.common.util.CommonCallbacks;
 import dji.sdk.realname.AppActivationManager;
 import dji.sdk.sdkmanager.DJISDKManager;
 import dji.sdk.useraccount.UserAccountManager;
+import dji.sdk.useraccount.a;
 
 public class Binding extends AppCompatActivity implements View.OnClickListener {
 
@@ -31,10 +32,13 @@ public class Binding extends AppCompatActivity implements View.OnClickListener {
     protected Button logoutBtn;
     protected TextView bindingStateTV;
     protected TextView appActivationStateTV;
+    protected TextView useraccountActivationStateTV;
 
     private AppActivationManager appActivationManager;
+    private UserAccountManager useraccountManager;
     private AppActivationState.AppActivationStateListener activationStateListener;
     private AircraftBindingState.AircraftBindingStateListener bindingStateListener;
+    private UserAccountManager.UserAccountStateChangeListener userAccountStateChangeListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,16 +69,19 @@ public class Binding extends AppCompatActivity implements View.OnClickListener {
         setUpListener();
 
         appActivationManager = DJISDKManager.getInstance().getAppActivationManager();
+        useraccountManager = UserAccountManager.getInstance();
 
         if (appActivationManager != null) {
             appActivationManager.addAppActivationStateListener(activationStateListener);
             appActivationManager.addAircraftBindingStateListener(bindingStateListener);
+            useraccountManager.addUserAccountStateChangeListener(userAccountStateChangeListener);
 
             Binding.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
                     appActivationStateTV.setText("" + appActivationManager.getAppActivationState());
                     bindingStateTV.setText("" + appActivationManager.getAircraftBindingState());
+                    useraccountActivationStateTV.setText("" + useraccountManager.getUserAccountState());
                 }
             });
         }
@@ -106,6 +113,19 @@ public class Binding extends AppCompatActivity implements View.OnClickListener {
                 });
             }
         };
+
+        userAccountStateChangeListener = new UserAccountManager.UserAccountStateChangeListener() {
+
+            @Override
+            public void onUserAccountStateChanged(final UserAccountState userAccountState, a a) {
+                Binding.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        useraccountActivationStateTV.setText("" + userAccountState);
+                    }
+                });
+            }
+        };
     }
 
     private void tearDownListener() {
@@ -127,6 +147,17 @@ public class Binding extends AppCompatActivity implements View.OnClickListener {
                 }
             });
         }
+
+        if (userAccountStateChangeListener !=null) {
+            useraccountManager.removeUserAccountStateChangeListener(userAccountStateChangeListener);
+            Binding.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    useraccountActivationStateTV.setText("Unknown");
+                }
+            });
+        }
+
     }
 
     @Override
@@ -164,6 +195,7 @@ public class Binding extends AppCompatActivity implements View.OnClickListener {
 
         bindingStateTV =  findViewById(R.id.tv_binding_state_info);
         appActivationStateTV =  findViewById(R.id.tv_activation_state_info);
+        useraccountActivationStateTV = findViewById(R.id.tv_useraccount_state_info);
         loginBtn =  findViewById(R.id.btn_login);
         logoutBtn =  findViewById(R.id.btn_logout);
         loginBtn.setOnClickListener(this);
