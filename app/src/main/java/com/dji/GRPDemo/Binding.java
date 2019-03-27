@@ -69,6 +69,7 @@ public class Binding extends AppCompatActivity implements View.OnClickListener {
         if (appActivationManager != null) {
             appActivationManager.addAppActivationStateListener(activationStateListener);
             appActivationManager.addAircraftBindingStateListener(bindingStateListener);
+
             Binding.this.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
