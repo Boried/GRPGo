@@ -60,4 +60,5 @@ dependencies {
     compileOnly 'com.dji:dji-sdk-provided:4.9'
     implementation 'com.dji:dji-uxsdk:4.9'
     compileOnly 'com.dji:dji-sdk-provided:4.9'
+
 }

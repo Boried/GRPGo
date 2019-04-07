@@ -25,11 +25,11 @@
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="Connection"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.467"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/binding" />
 
@@ -44,8 +44,10 @@
         android:text="UXview"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/camera"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/camera"
-        app:layout_constraintTop_toBottomOf="@+id/camera" />
+        app:layout_constraintTop_toBottomOf="@+id/camera"
+        app:layout_constraintVertical_bias="0.049" />
 
 
     <Button
@@ -53,11 +55,37 @@
         style="@style/common_button"
         android:layout_alignParentBottom="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="16dp"
         android:text="camera"
         app:layout_constraintEnd_toEndOf="@+id/connection"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/connection"
         app:layout_constraintTop_toBottomOf="@+id/connection" />
+
+    <Button
+        android:id="@+id/mapconnection"
+        style="@style/common_button"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:text="mapconnection"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/mapview"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/mapview"
+        app:layout_constraintTop_toBottomOf="@+id/mapview"
+        app:layout_constraintVertical_bias="0.056" />
+
+    <Button
+        android:id="@+id/mapview"
+        style="@style/common_button"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="mapview"
+        app:layout_constraintEnd_toEndOf="@+id/UXview"
+        app:layout_constraintStart_toStartOf="@+id/UXview"
+        app:layout_constraintTop_toBottomOf="@+id/UXview" />
 
 </android.support.constraint.ConstraintLayout>

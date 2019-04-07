@@ -1,6 +1,9 @@
 package com.dji.GRPDemo;
 
+import android.os.Bundle;
+
 import android.Manifest;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -8,8 +11,6 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
-import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -31,15 +32,14 @@ import dji.sdk.base.BaseProduct;
 import dji.sdk.products.Aircraft;
 import dji.sdk.sdkmanager.DJISDKManager;
 
-public class ConnectionActivity extends Activity implements View.OnClickListener {
+public class MapconnectionActivity extends Activity implements View.OnClickListener {
 
     private static final String TAG = ConnectionActivity.class.getName();
 
     private TextView mTextConnectionStatus;
     private TextView mTextProduct;
-    private Button mBtnOpen;
     private TextView mVersionTv;
-
+    private Button mBtnOpen;
     private static final String[] REQUIRED_PERMISSION_LIST = new String[]{
             Manifest.permission.VIBRATE,
             Manifest.permission.INTERNET,
@@ -59,6 +59,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
     private AtomicBoolean isRegistrationInProgress = new AtomicBoolean(false);
     private static final int REQUEST_PERMISSION_CODE = 12345;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,9 +71,8 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
 
         // Register the broadcast receiver for receiving the device connection's changes.
         IntentFilter filter = new IntentFilter();
-        filter.addAction(FPVDemoApplication.FLAG_CONNECTION_CHANGE);
+        filter.addAction(DJIDemoApplication.FLAG_CONNECTION_CHANGE);
         registerReceiver(mReceiver, filter);
-
     }
 
     /**
@@ -94,6 +94,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         }
 
     }
+
 
     /**
      * Result of runtime permission request
@@ -176,6 +177,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         }
     }
 
+
     @Override
     public void onResume() {
         Log.e(TAG, "onResume");
@@ -213,6 +215,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         mBtnOpen = (Button) findViewById(R.id.btn_open);
         mBtnOpen.setOnClickListener(this);
         mBtnOpen.setEnabled(false);
+
         mVersionTv = (TextView) findViewById(R.id.textView2);
         mVersionTv.setText(getResources().getString(R.string.sdk_version, DJISDKManager.getInstance().getSDKVersion()));
     }
@@ -226,7 +229,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
     };
 
     private void refreshSDKRelativeUI() {
-        BaseProduct mProduct = FPVDemoApplication.getProductInstance();
+        BaseProduct mProduct = DJIDemoApplication.getProductInstance();
 
         if (null != mProduct && mProduct.isConnected()) {
             Log.v(TAG, "refreshSDK: True");
@@ -255,7 +258,7 @@ public class ConnectionActivity extends Activity implements View.OnClickListener
         switch (v.getId()) {
 
             case R.id.btn_open: {
-                Intent intent = new Intent(this, CameraActivity.class);
+                Intent intent = new Intent(this, MapActivity.class);
                 startActivity(intent);
                 break;
             }

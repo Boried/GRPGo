@@ -3,11 +3,8 @@ package com.dji.GRPDemo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.content.Intent;
 import android.widget.Button;
-import android.widget.*;
-
 
 
 public class transferActivity extends AppCompatActivity {
@@ -16,6 +13,8 @@ public class transferActivity extends AppCompatActivity {
     Button connection;
     Button UX;
     Button camera;
+    Button mapconnection;
+    Button mapview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +25,8 @@ public class transferActivity extends AppCompatActivity {
         connection = (Button)findViewById(R.id.connection);
         UX = (Button)findViewById(R.id.UXview);
         camera = (Button)findViewById(R.id.camera);
+        mapconnection = (Button)findViewById(R.id.mapconnection);
+        mapview = (Button)findViewById(R.id.mapview);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -40,7 +41,7 @@ public class transferActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
-                intent.setClass(transferActivity.this,ConnectionActivity.class);
+                intent.setClass(transferActivity.this, ConnectionActivity.class);
                 startActivity(intent);
             }
         });
@@ -59,6 +60,24 @@ public class transferActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(transferActivity.this,CameraActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mapconnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(transferActivity.this,MapconnectionActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        mapview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(transferActivity.this,MapActivity.class);
                 startActivity(intent);
             }
         });
