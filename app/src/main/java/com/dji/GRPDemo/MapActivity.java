@@ -1,3 +1,5 @@
+//have used code on DJI official page , which is a tutorial about how to implements a app to control their aircraft
+//https://developer.dji.com/mobile-sdk/documentation/android-tutorials/ActivationAndBinding.html
 package com.dji.GRPDemo;
 
 import android.Manifest;
@@ -8,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -20,6 +23,18 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+
+
+
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.AMap.OnMapClickListener;
 import com.amap.api.maps.CameraUpdate;
@@ -30,6 +45,7 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -55,17 +71,23 @@ import dji.sdk.products.Aircraft;
 import dji.sdk.sdkmanager.DJISDKManager;
 import dji.sdk.useraccount.UserAccountManager;
 
+import static java.lang.Thread.sleep;
+
 public class MapActivity extends FragmentActivity implements View.OnClickListener, OnMapClickListener {
 
     protected static final String TAG = "MapActivity";
 
+    volatile private int infor = -1;
     private MapView mapView;
     private AMap aMap;
 
     private Button locate, add, clear;
     private Button config, upload, start, stop;
 
+    private Button web;
+
     private boolean isAdd = false;
+    private boolean isWeb = false;
 
     private double droneLocationLat = 181, droneLocationLng = 181;
     private final Map<Integer, Marker> mMarkers = new ConcurrentHashMap<Integer, Marker>();
@@ -83,18 +105,18 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
     private WaypointMissionHeadingMode mHeadingMode = WaypointMissionHeadingMode.AUTO;
 
     @Override
-    protected void onResume(){
+    protected void onResume() {
         super.onResume();
         initFlightController();
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
     }
 
     @Override
-    protected void onDestroy(){
+    protected void onDestroy() {
         unregisterReceiver(mReceiver);
         removeListener();
         super.onDestroy();
@@ -103,12 +125,12 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
     /**
      * @Description : RETURN Button RESPONSE FUNCTION
      */
-    public void onReturn(View view){
+    public void onReturn(View view) {
         Log.d(TAG, "onReturn");
         this.finish();
     }
 
-    private void setResultToToast(final String string){
+    private void setResultToToast(final String string) {
         MapActivity.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -135,6 +157,8 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
         start.setOnClickListener(this);
         stop.setOnClickListener(this);
 
+        web = (Button) findViewById(R.id.web);
+        web.setOnClickListener(this);
     }
 
     private void initMapView() {
@@ -144,7 +168,7 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
             aMap.setOnMapClickListener(this);// add the listener for click for amap object
         }
 
-        LatLng shenzhen = new LatLng(22.5362, 113.9454);
+        LatLng shenzhen = new LatLng(29.800288995201665, 121.56115455871578);
         aMap.addMarker(new MarkerOptions().position(shenzhen).title("Marker in Shenzhen"));
         aMap.moveCamera(CameraUpdateFactory.newLatLng(shenzhen));
     }
@@ -176,14 +200,13 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
         }
     };
 
-    private void onProductConnectionChange()
-    {
+    private void onProductConnectionChange() {
         initFlightController();
         loginAccount();
     }
 
     //maybe need to delete this
-    private void loginAccount(){
+    private void loginAccount() {
 
         UserAccountManager.getInstance().logIntoDJIUserAccount(this,
                 new CommonCallbacks.CompletionCallbackWith<UserAccountState>() {
@@ -191,6 +214,7 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
                     public void onSuccess(final UserAccountState userAccountState) {
                         Log.e(TAG, "Login Success");
                     }
+
                     @Override
                     public void onFailure(DJIError error) {
                         setResultToToast("Login Error:"
@@ -273,20 +297,19 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
 
     @Override
     public void onMapClick(LatLng point) {
-        if (isAdd == true){
+        if (isAdd == true) {
             markWaypoint(point);
             Waypoint mWaypoint = new Waypoint(point.latitude, point.longitude, altitude);
             //Add Waypoints to Waypoint arraylist;
             if (waypointMissionBuilder != null) {
                 waypointList.add(mWaypoint);
                 waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
-            }else
-            {
+            } else {
                 waypointMissionBuilder = new WaypointMission.Builder();
                 waypointList.add(mWaypoint);
                 waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
             }
-        }else{
+        } else {
             setResultToToast("Cannot Add Waypoint");
         }
     }
@@ -296,7 +319,7 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
     }
 
     // Update the drone location based on states from MCU.
-    private void updateDroneLocation(){
+    private void updateDroneLocation() {
 
         LatLng pos = new LatLng(droneLocationLat, droneLocationLng);
         //Create MarkerOptions object
@@ -318,7 +341,7 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
         });
     }
 
-    private void markWaypoint(LatLng point){
+    private void markWaypoint(LatLng point) {
         //Create MarkerOptions object
         MarkerOptions markerOptions = new MarkerOptions();
         markerOptions.position(point);
@@ -330,12 +353,12 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.locate:{
+            case R.id.locate: {
                 updateDroneLocation();
                 cameraUpdate(); // Locate the drone's place
                 break;
             }
-            case R.id.add:{
+            case R.id.add: {
                 enableDisableAdd();
                 break;
             }
@@ -352,20 +375,25 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
                 updateDroneLocation();
                 break;
             }
-            case R.id.config:{
+            case R.id.config: {
                 showSettingDialog();
                 break;
             }
-            case R.id.upload:{
+            case R.id.upload: {
                 uploadWayPointMission();
                 break;
             }
-            case R.id.start:{
+            case R.id.start: {
                 startWaypointMission();
                 break;
             }
-            case R.id.stop:{
+            case R.id.stop: {
                 stopWaypointMission();
+                break;
+            }
+
+            case R.id.web: {
+                enableDisableweb();
                 break;
             }
             default:
@@ -373,7 +401,7 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
         }
     }
 
-    private void cameraUpdate(){
+    private void cameraUpdate() {
         LatLng pos = new LatLng(droneLocationLat, droneLocationLng);
         float zoomlevel = (float) 18.0;
         CameraUpdate cu = CameraUpdateFactory.newLatLngZoom(pos, zoomlevel);
@@ -381,15 +409,314 @@ public class MapActivity extends FragmentActivity implements View.OnClickListene
 
     }
 
-    private void enableDisableAdd(){
+    private void enableDisableAdd() {
         if (isAdd == false) {
             isAdd = true;
             add.setText("Exit");
-        }else{
+        } else {
             isAdd = false;
             add.setText("Add");
         }
     }
+
+    private void enableDisableweb() {
+
+        if (isWeb == false) {
+            isWeb = true;
+
+            locate.setEnabled(false);
+            add.setEnabled(false);
+            clear.setEnabled(false);
+            config.setEnabled(false);
+            upload.setEnabled(false);
+            start.setEnabled(false);
+            stop.setEnabled(false);
+
+            web.setText("Exit");
+            getWebControlInfor();
+
+    }else
+    {
+        isWeb = false;
+
+        locate.setEnabled(true);
+        add.setEnabled(true);
+        clear.setEnabled(true);
+        config.setEnabled(true);
+        upload.setEnabled(true);
+        start.setEnabled(true);
+        stop.setEnabled(true);
+
+        web.setText("Web Control");
+    }
+
+}
+
+    private void RealTimelocation()
+    {
+        new Thread(new Runnable() {
+
+            @Override
+
+            public void run() {
+
+                while(isWeb == true) {
+
+                    try {
+                        sleep(1000);
+                        URL url = new URL("http://10.178.1.63/~Team201810/server/php/get_currentpoint.php");
+                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                        httpURLConnection.setRequestMethod("POST");
+                        httpURLConnection.setDoOutput(true);
+                        httpURLConnection.setReadTimeout(5000);
+                        httpURLConnection.setConnectTimeout(5000);
+                        httpURLConnection.connect();
+
+                        OutputStream out = httpURLConnection.getOutputStream();
+                        JSONObject obj = new JSONObject();
+
+                        obj.put("Lat", droneLocationLat);
+                        obj.put("Lng", droneLocationLng);
+                        Log.v("TAG", obj.toString());
+
+                        String str = "Location=" + obj.toString();
+                        out.write(str.getBytes());
+
+                        if (httpURLConnection.getResponseCode() == 200) {
+                            System.out.println("connected");
+                            // httpURLConnection.getResponseCode();
+                            InputStream is = httpURLConnection.getInputStream();
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+                            String lines = reader.readLine();
+
+                            System.out.println(lines);
+                            System.out.println("finish");
+
+                            is.close();
+                            out.close();
+                            httpURLConnection.disconnect();
+                        }else
+                        {
+                            System.out.println("wrong");
+                        }
+
+                    } catch (Exception e) {
+                        Log.getStackTraceString(e);
+                    }
+
+                }
+            }
+
+        }).start();
+
+    }
+
+    private void getWebControlInfor()
+    {
+
+        //while loop receive start infor
+        onProductConnectionChange();
+        cameraUpdate();
+
+        RealTimelocation();
+
+
+        take_off();
+
+
+
+
+
+
+
+
+    }
+
+    private void take_off() {
+
+        new Thread(new Runnable() {
+
+            @Override
+
+            public void run() {
+
+                while(isWeb == true) {
+
+                    if(infor == -1) {
+
+                    try {
+                        sleep(10000);
+                        URL url = new URL("http://10.178.1.63/~Team201810/server/php/Takeoff.php");
+                        HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                        httpURLConnection.setRequestMethod("POST");
+                        httpURLConnection.setDoOutput(true);
+                        httpURLConnection.setReadTimeout(5000);
+                        httpURLConnection.setConnectTimeout(5000);
+                        httpURLConnection.connect();
+
+                        OutputStream out = httpURLConnection.getOutputStream();
+
+                        String str = "ready=1";
+
+                        out.write(str.getBytes());
+
+                        if (httpURLConnection.getResponseCode() == 200) {
+                            System.out.println("connected");
+                            // httpURLConnection.getResponseCode();
+                            InputStream is = httpURLConnection.getInputStream();
+                            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+//                            String lines = reader.readLine();
+                            String lines;
+
+                            StringBuffer sb = new StringBuffer("");
+                            while ((lines = reader.readLine()) != null) {
+                                lines = new String(lines.getBytes(), "utf-8");
+                                sb.append(lines);
+                            }
+
+                            JSONObject root = new JSONObject(sb.toString());
+                            infor = root.getInt("Infor");
+                            System.out.println("infor is " + infor);
+
+
+                            if (infor == 1) {
+                                System.out.println("infor is " + infor);
+
+                                JSONObject config = root.getJSONObject("Config");
+                                setconfig(config);
+                                JSONArray positionarray = root.getJSONArray("Positions");
+                                setwaypoint(positionarray);
+
+
+                                Log.v("TAG", sb.toString());
+                            }
+
+
+                            System.out.println(sb);
+                            System.out.println("finish");
+
+                            is.close();
+                            out.close();
+                            httpURLConnection.disconnect();
+                        }else
+                        {
+                            System.out.println("wrong");
+                        }
+
+                    } catch (Exception e) {
+                        Log.getStackTraceString(e);
+                    }
+
+
+
+                    }
+                    else if (infor == 1)
+                    {
+                        infor = -1;
+                        startWaypointMission();
+                        System.out.printf("get 1");
+                    }
+                    else if(infor == 4)
+                    {
+                        infor = -1;
+                        stopWaypointMission();
+                    }
+
+                }
+            }
+
+        }).start();
+
+
+    }
+
+
+
+
+
+
+    private void setconfig(JSONObject config)
+    {
+        try {
+
+            if (config.getInt("Altitude") == 23){
+                altitude = 20;
+            } else if (config.getInt("Altitude") == 22){
+                altitude = 50;
+            } else if (config.getInt("Altitude") == 21){
+                altitude = 80;
+            }
+            System.out.println("Altitude is " + config.getInt("Altitude"));
+
+            if (config.getInt("Speed") == 13){
+                mSpeed = 3.0f;
+            } else if (config.getInt("Speed") == 12){
+                mSpeed = 5.0f;
+            } else if (config.getInt("Speed") == 11){
+                mSpeed = 10.0f;
+            }
+            System.out.println("Speed is " + config.getInt("Speed"));
+
+            if (config.getInt("FinishAction") == 30){
+                mFinishedAction = WaypointMissionFinishedAction.NO_ACTION;
+            } else if (config.getInt("FinishAction") == 31){
+                mFinishedAction = WaypointMissionFinishedAction.GO_HOME;
+            } else if (config.getInt("FinishAction") == 33){
+                mFinishedAction = WaypointMissionFinishedAction.AUTO_LAND;
+            } else if (config.getInt("FinishAction") == 32){
+                mFinishedAction = WaypointMissionFinishedAction.GO_FIRST_WAYPOINT;
+            }
+            System.out.println("FinishAction is " + config.getInt("FinishAction"));
+            if (config.getInt("HeadingMode") == 43) {
+                mHeadingMode = WaypointMissionHeadingMode.AUTO;
+            } else if (config.getInt("HeadingMode") == 42) {
+                mHeadingMode = WaypointMissionHeadingMode.USING_INITIAL_DIRECTION;
+            } else if (config.getInt("HeadingMode") == 40) {
+                mHeadingMode = WaypointMissionHeadingMode.CONTROL_BY_REMOTE_CONTROLLER;
+            } else if (config.getInt("HeadingMode") == 41) {
+                mHeadingMode = WaypointMissionHeadingMode.USING_WAYPOINT_HEADING;
+            }
+            System.out.println("HeadingMode is " + config.getInt("HeadingMode"));
+            configWayPointMission();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setwaypoint(JSONArray array)
+    {
+        try {
+            for (int i = 0; i < array.length(); i++) {
+                JSONObject position = array.getJSONObject(i);
+
+                LatLng point = new LatLng(position.getDouble("Lng"), position.getDouble("Lat"));
+
+                System.out.println("Lat is " + position.getDouble("Lat")+ "Lng is " + position.getDouble("Lng"));
+
+                markWaypoint(point);
+                Waypoint mWaypoint = new Waypoint(point.latitude, point.longitude, altitude);
+                //Add Waypoints to Waypoint arraylist;
+                if (waypointMissionBuilder != null) {
+                    waypointList.add(mWaypoint);
+                    waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+                }else
+                {
+                    waypointMissionBuilder = new WaypointMission.Builder();
+                    waypointList.add(mWaypoint);
+                    waypointMissionBuilder.waypointList(waypointList).waypointCount(waypointList.size());
+                }
+             }
+
+            uploadWayPointMission();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     private void showSettingDialog(){
         LinearLayout wayPointSettings = (LinearLayout)getLayoutInflater().inflate(R.layout.dialog_waypointsetting, null);

@@ -1,3 +1,5 @@
+//have used code on DJI official page , which is a tutorial about how to implements a app to control their aircraft
+//https://developer.dji.com/mobile-sdk/documentation/android-tutorials/ActivationAndBinding.html
 package com.dji.GRPDemo;
 
 import android.app.Application;

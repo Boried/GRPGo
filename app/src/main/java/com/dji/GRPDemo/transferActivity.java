@@ -15,6 +15,7 @@ public class transferActivity extends AppCompatActivity {
     Button camera;
     Button mapconnection;
     Button mapview;
+    Button testm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +23,12 @@ public class transferActivity extends AppCompatActivity {
         setContentView(R.layout.activity_transfer);
 
         login = (Button)findViewById(R.id.binding);
-        connection = (Button)findViewById(R.id.connection);
+//        connection = (Button)findViewById(R.id.connection);
         UX = (Button)findViewById(R.id.UXview);
-        camera = (Button)findViewById(R.id.camera);
-        mapconnection = (Button)findViewById(R.id.mapconnection);
+//        camera = (Button)findViewById(R.id.camera);
+//        mapconnection = (Button)findViewById(R.id.mapconnection);
         mapview = (Button)findViewById(R.id.mapview);
+//        testm = (Button)findViewById(R.id.testphpp);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,14 +39,14 @@ public class transferActivity extends AppCompatActivity {
             }
         });
 
-        connection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(transferActivity.this, ConnectionActivity.class);
-                startActivity(intent);
-            }
-        });
+//        connection.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(transferActivity.this, ConnectionActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         UX.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,23 +57,23 @@ public class transferActivity extends AppCompatActivity {
             }
         });
 
-        camera.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(transferActivity.this,CameraActivity.class);
-                startActivity(intent);
-            }
-        });
+//        camera.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(transferActivity.this,CameraActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
-        mapconnection.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(transferActivity.this,MapconnectionActivity.class);
-                startActivity(intent);
-            }
-        });
+//        mapconnection.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(transferActivity.this,MapconnectionActivity.class);
+//                startActivity(intent);
+//            }
+//        });
 
         mapview.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +83,15 @@ public class transferActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+//       testm.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Intent intent = new Intent();
+//                intent.setClass(transferActivity.this,testphp.class);
+//                startActivity(intent);
+//            }
+//        });
 
     }
 }

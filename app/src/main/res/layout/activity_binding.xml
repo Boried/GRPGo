@@ -4,49 +4,52 @@ android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical">
 
-<TextView
-    android:id="@+id/binding_state_label"
-    android:layout_width="wrap_content"
-    android:layout_height="60dp"
-    android:layout_below="@+id/textView"
-    android:layout_centerHorizontal="true"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="50dp"
-    android:gravity="center"
-    android:text="Binding State:"
-    android:textColor="@color/colorBlack"
-    android:textSize="17sp"
-    android:textStyle="bold" />
+    <TextView
+        android:id="@+id/binding_state_label"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_below="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="64dp"
+        android:gravity="center"
+        android:text="Binding State:"
+        android:textColor="@color/colorBlack"
+        android:textSize="17sp"
+        android:textStyle="bold" />
 
-<TextView
-    android:id="@+id/tv_binding_state_info"
-    android:layout_width="220dp"
-    android:layout_height="60dp"
-    android:layout_below="@+id/binding_state_label"
-    android:layout_centerHorizontal="true"
-    android:layout_gravity="center_horizontal"
-    android:gravity="center"
-    android:text="Unknown"
-    android:textColor="@color/colorBlack"
-    android:textSize="17sp" />
+    <TextView
+        android:id="@+id/tv_binding_state_info"
+        android:layout_width="220dp"
+        android:layout_height="60dp"
+        android:layout_below="@+id/binding_state_label"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="22dp"
+        android:gravity="center"
+        android:text="Unknown"
+        android:textColor="@color/colorBlack"
+        android:textSize="17sp" />
 
-<Button
-    android:id="@+id/btn_login"
-    style="@style/common_button"
-    android:layout_alignParentBottom="true"
-    android:layout_alignStart="@+id/tv_activation_state_info"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginBottom="79dp"
-    android:text="Login" />
+    <Button
+        android:id="@+id/btn_login"
+        style="@style/common_button"
+        android:layout_alignStart="@+id/tv_activation_state_info"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="-6dp"
+        android:layout_marginBottom="120dp"
+        android:text="Login" />
 
-<Button
-    android:id="@+id/btn_logout"
-    style="@style/common_button"
-    android:layout_alignParentBottom="true"
-    android:layout_alignEnd="@+id/tv_activation_state_info"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginBottom="79dp"
-    android:text="Logout" />
+    <Button
+        android:id="@+id/btn_logout"
+        style="@style/common_button"
+        android:layout_alignEnd="@+id/tv_activation_state_info"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="120dp"
+        android:text="Logout" />
 
 <TextView
     android:id="@+id/textView"
@@ -58,56 +61,47 @@ android:orientation="vertical">
     android:layout_alignParentTop="true"
     android:layout_centerHorizontal="true" />
 
-<TextView
-    android:id="@+id/activation_state_label"
-    android:layout_width="wrap_content"
-    android:layout_height="60dp"
-    android:layout_below="@+id/tv_binding_state_info"
-    android:layout_centerHorizontal="true"
-    android:layout_marginTop="11dp"
-    android:text="App Activation State:"
-    android:textColor="@color/colorBlack"
-    android:textSize="17sp"
-    android:textStyle="bold" />
-
-<TextView
-    android:id="@+id/tv_activation_state_info"
-    android:layout_width="220dp"
-    android:layout_height="60dp"
-    android:layout_alignEnd="@+id/tv_binding_state_info"
-    android:layout_below="@+id/activation_state_label"
-    android:text="Unknown"
-    android:textAlignment="center"
-    android:textColor="@color/colorBlack"
-    android:textSize="17sp" />
-
-
     <TextView
-        android:id="@+id/useraccount_state_label"
+        android:id="@+id/activation_state_label"
         android:layout_width="wrap_content"
         android:layout_height="60dp"
         android:layout_below="@+id/tv_binding_state_info"
-        android:layout_alignStart="@+id/tv_activation_state_info"
-        android:layout_alignEnd="@+id/tv_activation_state_info"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="145dp"
-        android:layout_marginEnd="32dp"
-        android:text="User account state:"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:text="App Activation State:"
         android:textColor="@color/colorBlack"
         android:textSize="17sp"
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/tv_useraccount_state_info"
+        android:id="@+id/tv_activation_state_info"
         android:layout_width="220dp"
         android:layout_height="60dp"
         android:layout_below="@+id/activation_state_label"
         android:layout_alignEnd="@+id/tv_binding_state_info"
-        android:layout_marginTop="137dp"
-        android:layout_marginEnd="-2dp"
+        android:layout_marginTop="39dp"
         android:text="Unknown"
         android:textAlignment="center"
         android:textColor="@color/colorBlack"
         android:textSize="17sp" />
+
+
+    <!--<TextView-->
+        <!--android:id="@+id/useraccount_state_label"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:text="User account state:"-->
+        <!--android:textColor="@color/colorBlack"-->
+        <!--android:textSize="17sp"-->
+        <!--android:textStyle="bold" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/tv_useraccount_state_info"-->
+        <!--android:layout_width="220dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:text="Unknown"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@color/colorBlack"-->
+        <!--android:textSize="17sp" />-->
 
 </RelativeLayout>

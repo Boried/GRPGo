@@ -26,6 +26,12 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
         <Button
+            android:id="@+id/web"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Web Control"
+            android:layout_weight="1"/>
+        <Button
             android:id="@+id/locate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
